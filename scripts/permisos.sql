@@ -1,0 +1,3 @@
+CREATE USER if not exists 'uPrueba'@'%' IDENTIFIED BY 'YOUR_PASS';
+GRANT SELECT, INSERT, UPDATE, CREATE ON muncher.* TO 'uPrueba'@'%';
+FLUSH PRIVILEGES;

@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id                   String           @id
+  email                String           @unique
+  name                 String
+  password             String
+  orders               orders[]
+  loadCoins            loadCoins[]
+  transfersCoinsSource transfersCoins[] @relation("transfersCoinsSource")
+  transfersCoinsTarget transfersCoins[] @relation("transfersCoinsTarget")
+}
+
+model orders {
+  id            String          @id
+  user          users           @relation(fields: [userId], references: [id])
+  userId        String
+  ordersDetails ordersDetails[]
+}
+
+model ordersDetails {
+  id        String @id
+  order     orders @relation(fields: [orderId], references: [id])
+  orderId   String
+  productId String
+  quantity  Int
+  priceProduct Int 
+}
+
+model loadCoins {
+  id       String @id
+  user     users  @relation(fields: [userId], references: [id])
+  userId   String
+  quantity Int
+}
+
+model transfersCoins {
+  id           String @id
+  userSource   users  @relation("transfersCoinsSource", fields: [userSourceId], references: [id])
+  userSourceId String
+  userTarget   users  @relation("transfersCoinsTarget", fields: [userTargetId], references: [id])
+  userTargetId String
+  quantity     Int
+}
